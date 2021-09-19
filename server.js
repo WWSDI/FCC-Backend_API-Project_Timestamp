@@ -24,6 +24,45 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
+// endpoint for date
+app.get("/api/:date?", (req, res) => {
+  const date = req.params.date;
+  console.log('📭', date)
+  let output;
+  const dateReg = new RegExp(/^\d{1,4}-\d{1,2}-\d{1,2}$/);
+  const unixReg = new RegExp(/^\d+$/);
+  // const utc = (new Date(date)).toString();
+  // if (utc === "Invalid Date") res.send({ 'error': "Invalid Date" })
+  const buildOutput = (unix, utc) => {
+    if (utc === "Invalid Date") return { 'error': "Invalid Date" }
+    else {
+      // ! not very elegant, refactor
+      utc = utc.substr(0, 3) + ', ' + utc.substr(8, 3) + utc.substr(4, 4) + utc.substr(11, 17);
+      return { unix, utc }
+    }
+  }
+
+  // for whatever reason, when date param is left empty, res.params.date becomes undefined instead of ''
+  if (!date) {
+    const unix = Date.now()
+    const utc = (new Date(unix)).toString()
+    output = buildOutput(unix, utc)
+  } else if (dateReg.test(date)) {
+    const unix = Date.parse(date)
+    const utc = (new Date(date)).toString()
+    output = buildOutput(unix, utc)
+  } else if (unixReg.test(date)) {
+    const unix = Number(date)
+    const utc = (new Date(unix)).toString()
+    output = buildOutput(unix, utc)
+  } else {
+    output = { 'error': "Invalid Date" }
+  }
+
+  res.send(output)
+})
+
+// endpoint for unix
 
 
 // listen for requests :)
