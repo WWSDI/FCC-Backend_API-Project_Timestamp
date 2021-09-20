@@ -4,7 +4,8 @@
 	"description": "An FCC Backend Challenge",
 	"main": "server.js",
 	"scripts": {
-		"start": "nodemon server.js"
+		"start": "nodemon server.js",
+		"test": "jest --watch"
 	},
 	"dependencies": {
 		"cors": "^2.8.0",
@@ -22,6 +23,8 @@
 	],
 	"license": "MIT",
 	"devDependencies": {
-		"nodemon": "^2.0.12"
+		"jest": "^27.2.0",
+		"nodemon": "^2.0.12",
+		"supertest": "^6.1.6"
 	}
 }
